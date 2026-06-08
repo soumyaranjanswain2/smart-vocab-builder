@@ -3,6 +3,7 @@ import { FaBook, FaClock, FaCheckCircle } from "react-icons/fa";
 import API from "../services/api";
 import toast from "react-hot-toast";
 import { FaSearch } from "react-icons/fa";
+import { FaTrash } from "react-icons/fa";
 
 function Dashboard() {
   const [word, setWord] = useState("");
@@ -52,6 +53,25 @@ function Dashboard() {
       setLoading(false);
     }
   };
+  const handleDelete = async (id) => {
+  const confirmDelete = window.confirm(
+    "Are you sure you want to delete this word?"
+  );
+
+  if (!confirmDelete) return;
+
+  try {
+    await API.delete(`/${id}`);
+
+    toast.success("Word Deleted Successfully");
+
+    fetchWords();
+  } catch (error) {
+    console.error(error);
+
+    toast.error("Failed to delete word");
+  }
+};
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
@@ -191,9 +211,18 @@ function Dashboard() {
                         {item.word}
                       </h3>
 
-                      <span className="text-xs bg-indigo-600 text-white px-3 py-1 rounded-full">
-                        Vocabulary
-                      </span>
+                     <div className="flex items-center gap-2">
+  <span className="text-xs bg-indigo-600 text-white px-3 py-1 rounded-full">
+    Vocabulary
+  </span>
+
+  <button
+    onClick={() => handleDelete(item._id)}
+    className="bg-red-500 text-white p-2 rounded-lg hover:bg-red-600 transition"
+  >
+    <FaTrash size={12} />
+  </button>
+</div>
                     </div>
 
                     <p className="text-gray-700">{item.definition}</p>

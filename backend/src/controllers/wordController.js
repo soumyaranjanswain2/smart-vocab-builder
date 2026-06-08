@@ -119,10 +119,24 @@ const reviewWord = async (req, res) => {
     });
   }
 };
+const deleteWord = async (req, res) => {
+  try {
+    await Word.findByIdAndDelete(req.params.id);
+
+    res.status(200).json({
+      message: "Word deleted successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Failed to delete word",
+    });
+  }
+};
 
 module.exports = {
   addWord,
   getAllWords,
   getWordsForReview,
   reviewWord,
+  deleteWord,
 };

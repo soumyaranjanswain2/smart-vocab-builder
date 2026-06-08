@@ -6,6 +6,7 @@ const {
   getAllWords,
   getWordsForReview,
   reviewWord,
+  deleteWord,
 } = require("../controllers/wordController");
 
 // Add Word
@@ -19,5 +20,8 @@ router.get("/review", getWordsForReview);
 
 // Update Review Status
 router.put("/:id/review", reviewWord);
+
+// Delete Word
+router.delete("/:id", deleteWord);
 
 module.exports = router;
