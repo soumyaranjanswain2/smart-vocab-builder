@@ -1,14 +1,18 @@
 const express = require("express");
 const router = express.Router();
-console.log("✅ Word Routes Loaded");
+
 const {
   addWord,
+  getAllWords,
   getWordsForReview,
   reviewWord,
 } = require("../controllers/wordController");
 
 // Add Word
 router.post("/", addWord);
+
+// Get All Words
+router.get("/", getAllWords);
 
 // Get Review Words
 router.get("/review", getWordsForReview);

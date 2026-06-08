@@ -12,6 +12,16 @@ const addWord = async (req, res) => {
 
     const { word } = req.body;
 
+    const existingWord = await Word.findOne({
+  word: word.toLowerCase(),
+});
+
+if (existingWord) {
+  return res.status(400).json({
+    message: "Word already exists",
+  });
+}
+
     console.log("Received word:", word);
 
     const data = await fetchWordData(word);
@@ -28,6 +38,23 @@ const addWord = async (req, res) => {
 
     res.status(400).json({
       message: error.message || "Word not found",
+    });
+  }
+};
+
+// Get All Words
+const getAllWords = async (req, res) => {
+  try {
+    const words = await Word.find().sort({
+      createdAt: -1,
+    });
+
+    res.status(200).json(words);
+  } catch (error) {
+    console.error("Get Words Error:", error);
+
+    res.status(500).json({
+      message: error.message,
     });
   }
 };
@@ -79,12 +106,8 @@ const reviewWord = async (req, res) => {
 
     const updatedWord = await Word.findByIdAndUpdate(
       id,
-      {
-        nextReviewDate,
-      },
-      {
-        new: true,
-      }
+      { nextReviewDate },
+      { new: true }
     );
 
     res.status(200).json(updatedWord);
@@ -99,6 +122,7 @@ const reviewWord = async (req, res) => {
 
 module.exports = {
   addWord,
+  getAllWords,
   getWordsForReview,
   reviewWord,
 };
